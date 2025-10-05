@@ -1,4 +1,5 @@
 import FilterIcon from "../assets/icons/filter-tick.svg";
+import NewsData from "./News";
 import { Button } from "./ui/button";
 import { useState } from "react";
 
@@ -48,6 +49,9 @@ const NewsSection = () => {
           })}
         </div>
       </div>
+      <NewsData title="News & Update" />
+      <NewsData title="Education" />
+      <NewsData title="Profile & Case Study" />
     </section>
   );
 };
