@@ -1,6 +1,6 @@
 import HeroPattern from "./HeroPattern";
 
-export default function Hero() {
+export default function HeroCommunity() {
   return (
     <section className="relative overflow-hidden">
       <HeroPattern />

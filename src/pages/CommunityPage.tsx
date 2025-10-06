@@ -1,20 +1,22 @@
-import Discover from "../components/Banner";
+import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import HeroNews from "@/components/HeroNews";
 import NewsSection from "@/components/NewsSection";
 
 // import Testimonials from "../components/Testimonials";
-// import Hero from "../components/HeroSection";
+// import HeroCommunity from "../components/HeroCommunity";
 // import ReflectionText from "../components/Reflection";
 
 const CommunityPage = () => {
   return (
     <div>
       <Navbar />
-      <Discover />
+      <HeroNews />
+      <Banner />
       <NewsSection />
       {/* Community */}
-      {/* <Hero />
+      {/* <HeroCommunity />
       <Testimonials />
       <ReflectionText /> */}
       <Footer />

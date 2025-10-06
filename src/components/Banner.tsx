@@ -112,7 +112,7 @@ export default function Banner() {
                   loading="lazy"
                 />
 
-                <div className="absolute top-10 left-4 z-10">
+                <div className="absolute top-5 left-4 z-10">
                   <div className="relative rounded-2xl p-[1px] bg-gradient-to-b from-white/60 to-white/10 shadow-[0_10px_30px_-10px_rgba(0,0,0,.6)]">
                     <div className="flex items-center gap-3 rounded-2xl px-4 py-2 bg-white/10 backdrop-blur-xl ring-1 ring-white/20">
                       <span className="relative inline-flex h-3 w-3">
@@ -130,7 +130,7 @@ export default function Banner() {
 
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-                <CardContent className="absolute inset-x-6 bottom-6 p-0">
+                <CardContent className="absolute inset-x-6 top-33 p-0">
                   <h3 className="text-white text-3xl font-semibold max-w-sm">
                     {item.title}
                   </h3>
