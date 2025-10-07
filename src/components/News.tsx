@@ -1,11 +1,33 @@
 import ImageNews from "../assets/images/image-news.png";
 import { Eye } from "lucide-react";
+import { useMemo } from "react";
 
-type Props = {
+type NewsItem = {
+  id?: string;
+  label: "Education" | "News & Update" | "Profile & Case Study" | string;
+  image: string;
   title: string;
+  description: string;
+  view: string;
+  read: string;
 };
 
-const newsData = [
+type Props = {
+  /** Jika diisi → component otomatis filter berdasarkan label === title */
+  title?: string;
+
+  /** Mode untuk UNTITLED (Must Read) saja: "less" = 4 item tanpa pagination, "more" = 8 per halaman + pagination */
+  viewModeForUntitled?: "less" | "more";
+
+  /** State halaman (hanya dipakai saat UNTITLED + viewModeForUntitled==="more") */
+  page?: number;
+  onPageChange?: (p: number) => void;
+
+  /** Optional override data dari luar (kalau mau). Kalau tidak, pakai internal dummy. */
+  items?: NewsItem[];
+};
+
+const INTERNAL_DATA: NewsItem[] = [
   {
     label: "Education",
     image: ImageNews,
@@ -34,7 +56,79 @@ const newsData = [
     read: "8 mins"
   },
   {
+    label: "News & Update",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "News & Update",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
     label: "Education",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "Education",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "Education",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "Profile & Case Study",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "Profile & Case Study",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "Profile & Case Study",
+    image: ImageNews,
+    title: "Lorem Ipsum",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident voluptatum obcaecati nobis, non corporis!",
+    view: "1.3k",
+    read: "8 mins"
+  },
+  {
+    label: "Profile & Case Study",
     image: ImageNews,
     title: "Lorem Ipsum",
     description:
@@ -44,17 +138,63 @@ const newsData = [
   }
 ];
 
-const NewsData = ({ title }: Props) => {
+const PER_PAGE_LESS = 4;
+const PER_PAGE_MORE = 8;
+
+const NewsData = ({
+  title,
+  viewModeForUntitled = "less",
+  page = 1,
+  onPageChange,
+  items
+}: Props) => {
+  const source = items ?? INTERNAL_DATA;
+
+  // Jika ada title → otomatis filter sesuai label (blok kategori)
+  const filtered = useMemo(() => {
+    if (title) return source.filter((n) => n.label === title);
+    return source; // UNTITLED → Must Read
+  }, [source, title]);
+
+  const isUntitled = !title;
+
+  // Logic khusus UNTITLED (Must Read)
+  const { visible, totalPages } = useMemo(() => {
+    if (!isUntitled) {
+      return { visible: filtered, totalPages: 1 };
+    }
+    if (viewModeForUntitled === "less") {
+      return { visible: filtered.slice(0, PER_PAGE_LESS), totalPages: 1 };
+    }
+    // viewMode === "more" → pagination 8 per page
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE_MORE));
+    const safePage = Math.min(Math.max(1, page), totalPages);
+    const start = (safePage - 1) * PER_PAGE_MORE;
+    const end = start + PER_PAGE_MORE;
+    return { visible: filtered.slice(start, end), totalPages };
+  }, [filtered, isUntitled, viewModeForUntitled, page]);
+
+  const showPagination =
+    isUntitled && viewModeForUntitled === "more" && totalPages > 1;
+
   return (
     <div className="py-5">
-      <h2 className="text-xl mb-5">{title}</h2>
-      {/* News  */}
+      {!!title && <h2 className="text-xl mb-5">{title}</h2>}
+
+      {/* News grid */}
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
-        {/* News Card */}
-        {newsData.map((data) => (
-          <div className="flex flex-col gap-2">
+        {visible.map((data, i) => (
+          <div
+            key={data.id ?? `${data.title}-${i}`}
+            className="flex flex-col gap-2"
+          >
             <div className="relative">
-              <img src={data.image} alt="" className="rounded-xl" />
+              <img
+                src={data.image}
+                alt={`${data.title} thumbnail`}
+                className="rounded-xl"
+                loading="lazy"
+              />
 
               <div className="absolute top-3 left-3">
                 <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-white/60 to-white/10 shadow-[0_10px_30px_-10px_rgba(0,0,0,.6)]">
@@ -73,7 +213,7 @@ const NewsData = ({ title }: Props) => {
               </div>
             </div>
 
-            <h3>{data.title}</h3>
+            <h3 className="font-medium">{data.title}</h3>
             <p className="text-gray-500">{data.description}</p>
 
             <div className="flex items-center gap-2">
@@ -87,6 +227,45 @@ const NewsData = ({ title }: Props) => {
           </div>
         ))}
       </div>
+
+      {/* Pagination untuk UNTITLED saat "more" */}
+      {showPagination && (
+        <div className="mt-6 flex items-center justify-center gap-2">
+          <button
+            onClick={() => onPageChange?.(Math.max(1, page - 1))}
+            disabled={page <= 1}
+            className="px-3 py-1 rounded border disabled:opacity-40"
+          >
+            Prev
+          </button>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const p = i + 1;
+              const active = p === page;
+              return (
+                <button
+                  key={p}
+                  onClick={() => onPageChange?.(p)}
+                  className={`px-3 py-1 rounded border ${
+                    active
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  {p}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            onClick={() => onPageChange?.(Math.min(totalPages, page + 1))}
+            disabled={page >= totalPages}
+            className="px-3 py-1 rounded border disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -4,9 +4,9 @@ import Navbar from "../components/Navbar";
 import HeroNews from "@/components/HeroNews";
 import NewsSection from "@/components/NewsSection";
 
-// import Testimonials from "../components/Testimonials";
-// import HeroCommunity from "../components/HeroCommunity";
-// import ReflectionText from "../components/Reflection";
+import Testimonials from "../components/Testimonials";
+import HeroCommunity from "../components/HeroCommunity";
+import ReflectionText from "../components/Reflection";
 
 const CommunityPage = () => {
   return (
@@ -16,9 +16,9 @@ const CommunityPage = () => {
       <Banner />
       <NewsSection />
       {/* Community */}
-      {/* <HeroCommunity />
+      <HeroCommunity />
       <Testimonials />
-      <ReflectionText /> */}
+      <ReflectionText />
       <Footer />
     </div>
   );
