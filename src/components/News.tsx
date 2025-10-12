@@ -13,17 +13,10 @@ type NewsItem = {
 };
 
 type Props = {
-  /** Jika diisi → component otomatis filter berdasarkan label === title */
   title?: string;
-
-  /** Mode untuk UNTITLED (Must Read) saja: "less" = 4 item tanpa pagination, "more" = 8 per halaman + pagination */
   viewModeForUntitled?: "less" | "more";
-
-  /** State halaman (hanya dipakai saat UNTITLED + viewModeForUntitled==="more") */
   page?: number;
   onPageChange?: (p: number) => void;
-
-  /** Optional override data dari luar (kalau mau). Kalau tidak, pakai internal dummy. */
   items?: NewsItem[];
 };
 
@@ -150,15 +143,13 @@ const NewsData = ({
 }: Props) => {
   const source = items ?? INTERNAL_DATA;
 
-  // Jika ada title → otomatis filter sesuai label (blok kategori)
   const filtered = useMemo(() => {
     if (title) return source.filter((n) => n.label === title);
-    return source; // UNTITLED → Must Read
+    return source;
   }, [source, title]);
 
   const isUntitled = !title;
 
-  // Logic khusus UNTITLED (Must Read)
   const { visible, totalPages } = useMemo(() => {
     if (!isUntitled) {
       return { visible: filtered, totalPages: 1 };
@@ -166,7 +157,6 @@ const NewsData = ({
     if (viewModeForUntitled === "less") {
       return { visible: filtered.slice(0, PER_PAGE_LESS), totalPages: 1 };
     }
-    // viewMode === "more" → pagination 8 per page
     const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE_MORE));
     const safePage = Math.min(Math.max(1, page), totalPages);
     const start = (safePage - 1) * PER_PAGE_MORE;

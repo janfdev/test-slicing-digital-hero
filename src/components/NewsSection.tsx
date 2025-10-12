@@ -24,7 +24,6 @@ export default function NewsSection() {
     }
   };
 
-  // Tampilkan blok bertitle mengikuti filter kategori (opsional)
   const titledBlocks = useMemo(() => {
     if (!activeCategory || activeCategory === "All") {
       return ["News & Update", "Education", "Profile & Case Study"];
@@ -79,14 +78,12 @@ export default function NewsSection() {
         </button>
       </div>
 
-      {/* ===== Must Read (UNTITLED) ===== */}
       <NewsData
         viewModeForUntitled={isViewMore ? "more" : "less"}
         page={page}
         onPageChange={setPage}
       />
 
-      {/* ===== Blok kategori (bertile) — mengikuti filter ===== */}
       <div className="mt-8 grid gap-6">
         {titledBlocks.map((label) => (
           <NewsData key={label} title={label} />

@@ -1,9 +1,3 @@
-/**
- * Background pola garis (vertical + diagonal) seperti contoh.
- * - Tanpa dependency tambahan, hanya Tailwind + inline CSS.
- * - Warna garis pakai RGBA tipis agar elegan.
- * - Diletakkan sebagai elemen absolut di belakang konten hero.
- */
 export default function HeroPattern({
   className = ""
 }: {

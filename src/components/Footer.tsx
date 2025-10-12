@@ -45,7 +45,7 @@ const socialLinks = [
   }
 ];
 
-export default function Footer03() {
+export default function Footer() {
   return (
     <footer className="px-10 py-16">
       <div className="space-y-8 px-4 sm:px-6 lg:space-y-16 ">

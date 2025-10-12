@@ -1,22 +1,18 @@
-import Banner from "../components/Banner";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import HeroNews from "@/components/HeroNews";
-import NewsSection from "@/components/NewsSection";
-
-import Testimonials from "../components/Testimonials";
 import HeroCommunity from "../components/HeroCommunity";
+import Navbar from "../components/Navbar";
 import ReflectionText from "../components/Reflection";
+import Testimonials from "../components/Testimonials";
+import BannerGrid from "@/components/BannerGrid";
+import OurCommunity from "@/components/OurCommunity";
 
 const CommunityPage = () => {
   return (
     <div>
       <Navbar />
-      <HeroNews />
-      <Banner />
-      <NewsSection />
-      {/* Community */}
       <HeroCommunity />
+      <OurCommunity />
+      <BannerGrid />
       <Testimonials />
       <ReflectionText />
       <Footer />
